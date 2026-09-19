@@ -29,105 +29,337 @@
 }
 *{box-sizing:border-box}
 html{background:var(--bg)}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
-main{max-width:1240px;margin:0 auto;padding:44px 28px 56px}
-h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,4.6vw,48px);line-height:1.05;letter-spacing:-.02em;margin:0 0 14px}
-.lede{max-width:60ch;margin:0;color:var(--muted);font-size:17px}
-.controls{display:flex;flex-wrap:wrap;gap:14px 36px;margin:34px 0 18px}
-.group{display:flex;flex-direction:column;gap:7px}
-.group>span{font-size:13px;color:var(--muted);font-weight:500}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+main{max-width:1240px;margin:0 auto;padding:36px 28px 44px}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:18px 40px;margin-bottom:26px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4vw,42px);line-height:1.05;letter-spacing:-.02em;margin:0}
+.sub{margin:6px 0 0;color:var(--muted);font-size:15px}
+.controls{display:flex;flex-wrap:wrap;gap:12px 28px}
 .seg{display:flex;flex-wrap:wrap;gap:6px}
-.seg button{font:inherit;font-size:14px;font-weight:500;color:var(--ink);background:var(--chip);border:0;border-radius:999px;padding:7px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background-color .2s,color .2s}
+.seg button{font:inherit;font-size:14px;font-weight:500;color:var(--ink);background:var(--chip);border:0;border-radius:999px;padding:6px 13px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background-color .2s,color .2s}
 .seg button[aria-pressed="true"]{background:var(--chip-on);color:var(--chip-on-ink)}
-.seg button:focus-visible,.ind:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.seg button:focus-visible,.fx:focus-visible,.kpi[data-id]:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .seg button i{width:9px;height:9px;border-radius:50%;background:var(--c);display:inline-block}
 .seg button[aria-pressed="true"] i{box-shadow:0 0 0 1.5px var(--chip-on-ink)}
 .k-agri{--c:var(--agri)}.k-ind{--c:var(--ind)}.k-serv{--c:var(--serv)}
-#detail{min-height:3.4em;max-width:78ch;margin:0 0 6px;font-size:16px;color:var(--ink)}
-#detail .hint{color:var(--muted)}
-.hint-swipe{display:none;margin:0 0 6px;font-size:13px;color:var(--muted)}
+
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.kpi{padding:18px 22px 20px;border-left:1px solid var(--rule)}
+.kpi:first-child{border-left:0;padding-left:0}
+.kpi .k{font-size:13px;color:var(--muted);font-weight:500}
+.kpi .v{font-family:var(--display);font-weight:700;font-size:36px;line-height:1.1;letter-spacing:-.02em;margin:5px 0 4px;font-variant-numeric:tabular-nums}
+.kpi .v.name{font-size:22px;line-height:1.2;letter-spacing:-.01em;min-height:2.4em;display:flex;align-items:center}
+.kpi .s{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.kpi[data-id]{cursor:default}
+
+.row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:12px 48px;margin-top:30px}
+.panel{min-width:0}
+.panel.wide{margin-top:34px;padding-top:22px;border-top:1px solid var(--rule)}
+.ph{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:10px}
+h2{font-family:var(--display);font-weight:500;font-size:18px;margin:0}
+.read{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.only-touch{display:none}
+@media (hover:none){.only-touch{display:inline}.only-hover{display:none}}
 #chart{overflow-x:auto;padding-bottom:6px}
-#chart svg{display:block}
+svg{display:block;max-width:none}
 svg text{font-family:var(--body)}
+
+.agri{--c:var(--agri)}.ind-s{--c:var(--ind)}.serv{--c:var(--serv)}.all{--c:var(--ink)}
+.fx{cursor:pointer;transition:opacity .25s ease;outline:none}
+.fx.dim{opacity:.14}
+
+/* trend */
+.grid line{stroke:var(--rule);stroke-width:1}
+.axis text{font-size:12px;fill:var(--muted);font-variant-numeric:tabular-nums}
+.axis .yl{text-anchor:end}.axis .xl{text-anchor:middle}
+.band{fill:var(--band)}
+.tline{fill:none;stroke:var(--c);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.tarea{fill:var(--c);opacity:.09}
+.tdot{fill:var(--c)}
+.hov line{stroke:var(--muted);stroke-width:1}
+.hov circle{fill:var(--c);stroke:var(--bg);stroke-width:2}
+
+/* bars */
+.bar rect{fill:var(--c)}
+.bar .bl{font-size:13px;fill:var(--ink);text-anchor:end;dominant-baseline:central}
+.bar .bv{font-size:13px;fill:var(--muted);dominant-baseline:central;font-variant-numeric:tabular-nums}
+.bar.on .bl{font-weight:600}
+
+/* bump */
 .yr{font-size:13px;fill:var(--muted);text-anchor:middle;font-variant-numeric:tabular-nums}
 .guide{stroke:var(--rule);stroke-width:1}
-.band{fill:var(--band)}
-.bandlab{font-size:12px;fill:var(--muted);text-anchor:middle}
-.ind{cursor:pointer;transition:opacity .25s ease;outline:none}
-.ind.agri{--c:var(--agri)}.ind.ind-s{--c:var(--ind)}.ind.serv{--c:var(--serv)}
 .ind .line{fill:none;stroke:var(--c);stroke-width:2.25;stroke-linecap:round;transition:stroke-width .2s}
 .ind .hit{fill:none;stroke:transparent;stroke-width:16;pointer-events:stroke}
-.ind .pt circle{fill:var(--c);transition:r .2s}
+.ind .pt circle{fill:var(--c)}
 .ind .pt text{fill:var(--on-dot);font-size:10px;font-weight:600;text-anchor:middle;dominant-baseline:central;font-variant-numeric:tabular-nums;pointer-events:none}
-.ind .lab{font-size:13px;fill:var(--ink);transition:font-weight .2s}
+.ind .lab{font-size:13px;fill:var(--ink)}
 .ind .lab.l{text-anchor:end}.ind .lab.r{text-anchor:start}
-.ind.dim{opacity:.13}
 .ind.on .line{stroke-width:3.75}
 .ind.on .lab{font-weight:600}
-footer{margin-top:30px;max-width:78ch;font-size:13px;color:var(--muted)}
-footer p{margin:0 0 6px}
-@media (max-width:900px){.hint-swipe{display:block}main{padding:32px 18px 44px}}
-@media (prefers-reduced-motion: reduce){.ind,.ind .line,.ind .pt circle,.seg button{transition:none}}
+
+#tip{position:fixed;z-index:10;left:0;top:0;opacity:0;pointer-events:none;background:var(--ink);color:var(--bg);font-size:13px;line-height:1.35;padding:6px 10px;border-radius:6px;transition:opacity .12s;font-variant-numeric:tabular-nums;max-width:260px}
+footer{margin-top:26px;font-size:13px;color:var(--muted)}
+@media (max-width:900px){
+  main{padding:26px 18px 36px}
+  .row{grid-template-columns:minmax(0,1fr)}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi{padding:16px 16px 18px}
+  .kpi:nth-child(odd){border-left:0;padding-left:0}
+  .kpi:nth-child(n+3){border-top:1px solid var(--rule)}
+  .kpi .v{font-size:30px}
+}
+@media (prefers-reduced-motion: reduce){.fx,.ind .line,.seg button,#tip{transition:none}}
 </style>
 </head>
 <body>
 <main>
-  <h1>Where Filipinos work, 2012–2025</h1>
-  <p class="lede">Industries ranked by the number of employed persons, year by year. Hover an industry to follow its path, or click to keep it highlighted.</p>
-
-  <div class="controls">
-    <div class="group" role="group" aria-label="Sector">
-      <span>Sector</span>
-      <div class="seg" id="seg-sector">
+  <header class="top">
+    <div>
+      <h1>Where Filipinos work</h1>
+      <p class="sub">Employed persons by industry, 2012–2025</p>
+    </div>
+    <div class="controls">
+      <div class="seg" id="seg-sector" role="group" aria-label="Sector">
         <button type="button" data-v="all" aria-pressed="true">All sectors</button>
         <button type="button" data-v="agri" class="k-agri" aria-pressed="false"><i></i>Agriculture</button>
         <button type="button" data-v="ind" class="k-ind" aria-pressed="false"><i></i>Industry</button>
         <button type="button" data-v="serv" class="k-serv" aria-pressed="false"><i></i>Services</button>
       </div>
-    </div>
-    <div class="group" role="group" aria-label="How many industries to show">
-      <span>Show</span>
-      <div class="seg" id="seg-count">
+      <div class="seg" id="seg-count" role="group" aria-label="How many industries to show">
         <button type="button" data-v="10" aria-pressed="true">Top 10</button>
         <button type="button" data-v="all" aria-pressed="false">All industries</button>
       </div>
     </div>
-  </div>
+  </header>
 
-  <p id="detail" aria-live="polite"></p>
-  <p class="hint-swipe">Swipe sideways to see the full chart.</p>
-  <div id="chart"></div>
+  <section class="kpis" id="kpis" aria-label="Key figures"></section>
 
-  <footer>
-    <p>Source: Philippine Statistics Authority, Labor Force Survey, annual figures by major industry group (2009 PSIC), downloaded from PSA OpenSTAT. Employed persons are counted in thousands in the source table.</p>
-    <p>Rank is calculated among the industries shown. Top 10 uses each industry's 2025 employment. Extraterritorial organizations (under 7 thousand workers) are left out. This is an independent visualization, not an official PSA product.</p>
-  </footer>
+  <section class="row">
+    <div class="panel">
+      <div class="ph"><h2 id="trend-title">All industries</h2><span class="read" id="trend-read"></span></div>
+      <div id="trend"></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><h2>Largest industries in 2025</h2></div>
+      <div id="bars"></div>
+    </div>
+  </section>
+
+  <section class="panel wide">
+    <div class="ph"><h2>Rank by year</h2><span class="read"><span class="only-hover">Hover to follow, click to pin</span><span class="only-touch">Tap to pin, swipe to scroll</span></span></div>
+    <div id="chart"></div>
+  </section>
+
+  <footer>Source: Philippine Statistics Authority, Labor Force Survey (annual, 2009 PSIC), via PSA OpenSTAT. Independent project, not an official PSA product.</footer>
 </main>
+<div id="tip" role="tooltip"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script>
 (function(){
   var D = {"years":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"industries":[{"id":"agriculture-forestry","name":"Agriculture and forestry","short":"Agriculture & forestry","sector":"agri","v":[10660.444,10428.696,10404.944,9972.656,9801.112,9066.481,8872.257,8070.066,8574.184,9352.728,9547.57,9727.689,8872.932,8748.91]},{"id":"fishing-aquaculture","name":"Fishing and aquaculture","short":"Fishing & aquaculture","sector":"agri","v":[1432.295,1406.692,1396.476,1320.987,1262.585,1194.388,1125.99,1255.126,1179.499,1303.664,1288.735,1426.799,1190.811,1299.474]},{"id":"mining-quarrying","name":"Mining and quarrying","short":"Mining & quarrying","sector":"ind","v":[249.894,250.287,239.42,234.515,218.777,203.333,206.505,176.568,184.001,169.723,221.809,213.238,240.792,207.923]},{"id":"manufacturing","name":"Manufacturing","short":"Manufacturing","sector":"ind","v":[3112.387,3159.357,3212.177,3208.611,3403.963,3481.326,3625.284,3650.788,3183.696,3453.009,3756.031,3520.056,3664.167,3487.378]},{"id":"electricity-gas-supply","name":"Electricity, gas, steam, and air conditioning supply","short":"Electricity & gas supply","sector":"ind","v":[89.46,94.438,85.984,83.244,91.437,79.867,87.584,90.56,80.939,75.844,95.224,94.465,86.94,97.103]},{"id":"water-waste-management","name":"Water supply; sewerage, waste management and remediation activities","short":"Water & waste management","sector":"ind","v":[59.449,60.097,51.211,51.694,67.644,68.669,61.377,64.483,58.109,74.725,72.924,63.271,84.223,70.759]},{"id":"construction","name":"Construction","short":"Construction","sector":"ind","v":[2231.905,2372.727,2578.322,2696.814,3377.669,3536.848,3865.472,4123.322,3699.562,4319.159,4381.858,4548.812,4851.166,4838.614]},{"id":"wholesale-retail-trade","name":"Wholesale and retail trade; repair of motor vehicles and motorcycles","short":"Wholesale & retail trade","sector":"serv","v":[6863.97,7105.49,7248.397,7312.945,8039.247,7899.768,7993.913,8368.491,8081.048,9725.209,10382.466,10137.623,10126.832,10067.513]},{"id":"transportation-storage","name":"Transportation and storage","short":"Transportation & storage","sector":"serv","v":[2616.872,2734.224,2686.234,2781.366,3037.818,3127.364,3220.184,3424.138,2932.288,2938.85,3243.77,3507.909,3763.248,3767.367]},{"id":"accommodation-food","name":"Accommodation and food service activities","short":"Accommodation & food","sector":"serv","v":[1571.319,1606.891,1694.479,1716.296,1777.24,1739.698,1727.44,1932.97,1468.16,1416.059,1817.583,2273.695,2645.148,2788.44]},{"id":"information-communication","name":"Information and communication","short":"Information & communication","sector":"serv","v":[338.034,344.452,352.056,381.0,366.49,396.668,403.495,433.098,349.647,444.645,483.972,474.313,460.447,497.256]},{"id":"finance-insurance","name":"Financial and insurance activities","short":"Finance & insurance","sector":"serv","v":[437.438,448.218,491.291,497.561,513.846,506.298,540.444,585.55,555.762,619.718,645.26,618.799,677.151,715.013]},{"id":"real-estate","name":"Real estate activities","short":"Real estate","sector":"serv","v":[170.427,172.618,167.555,184.103,193.038,185.997,203.706,236.705,191.977,203.982,238.089,249.398,269.369,287.408]},{"id":"professional-technical","name":"Professional, scientific and technical activities","short":"Professional & technical","sector":"serv","v":[188.901,193.997,208.893,208.472,212.645,247.294,274.629,309.97,260.321,296.346,343.624,381.0,408.338,391.248]},{"id":"administrative-support","name":"Administrative and support service activities","short":"Administrative & support","sector":"serv","v":[936.559,1015.754,1085.127,1138.778,1370.776,1474.983,1583.888,1692.36,1608.915,1831.027,2185.194,2371.703,2648.304,2795.935]},{"id":"public-administration","name":"Public administration and defense; compulsory social security","short":"Public administration","sector":"serv","v":[1957.989,1965.406,1963.939,2096.244,2195.693,2408.207,2559.454,2723.609,2563.318,2729.307,2843.873,2878.564,2967.705,3001.557]},{"id":"education","name":"Education","short":"Education","sector":"serv","v":[1200.022,1225.649,1254.295,1282.198,1303.92,1204.41,1196.64,1266.97,1286.059,1425.691,1467.175,1580.071,1613.934,1686.419]},{"id":"health-social-work","name":"Human health and social work activities","short":"Health & social work","sector":"serv","v":[437.648,468.85,480.317,493.752,501.709,484.368,517.583,542.813,542.366,658.194,668.593,691.599,731.409,775.952]},{"id":"arts-recreation","name":"Arts, entertainment and recreation","short":"Arts & recreation","sector":"serv","v":[327.779,347.255,348.87,343.154,361.285,325.407,363.097,401.74,230.415,336.548,411.246,457.629,451.645,459.185]},{"id":"other-services","name":"Other service activities","short":"Other services","sector":"serv","v":[2148.827,2188.623,2186.685,2489.28,2895.985,2699.55,2723.597,2588.162,2345.681,2612.96,2789.947,2958.287,3085.634,3029.272]},{"id":"household-employers","name":"Activities of Households as Employers","short":"Household employers","sector":"serv","v":[566.315,524.12,507.711,243.841,1.82,1.464,0.468,0.0,0.0,0.0,0.0,0.0,0.0,0.0]}]};
   var years = D.years, last = years.length - 1;
+  var SECTOR = {agri:'Agriculture', ind:'Industry', serv:'Services'};
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  var state = { sector:'all', count:10, pinned:null, hovered:null, hoverYear:null };
-  var wrap = document.getElementById('chart');
-  var detail = document.getElementById('detail');
-  var items = [];
+  var state = { sector:'all', count:10, pinned:null, hovered:null };
+  var byId = {}; D.industries.forEach(function(d){ byId[d.id] = d; });
 
-  var svg = d3.select(wrap).append('svg').attr('role','group')
-    .attr('aria-label','Bump chart ranking industries by number of employed persons, '+years[0]+' to '+years[last]);
-  var bandG = svg.append('g'), guideG = svg.append('g'), yearG = svg.append('g'), linesG = svg.append('g');
-  var bandRect = bandG.append('rect').attr('class','band');
-  var bandText = bandG.append('text').attr('class','bandlab').text('Pandemic year');
+  var el = {
+    kpis: document.getElementById('kpis'), trend: document.getElementById('trend'), bars: document.getElementById('bars'),
+    chart: document.getElementById('chart'), title: document.getElementById('trend-title'), read: document.getElementById('trend-read'),
+    tip: document.getElementById('tip')
+  };
 
-  function fmt(v){ return v >= 1000 ? (v/1000).toFixed(1) + ' million' : Math.round(v) + ' thousand'; }
-  function ord(n){ var s=['th','st','nd','rd'], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+  /* ---------- helpers ---------- */
+  function cls(s){ return s==='ind' ? 'ind-s' : s; }
+  function fmtM(v){ return v >= 1000 ? (v/1000).toFixed(1) + 'M' : Math.round(v) + 'K'; }
+  function fmtAxis(v){ return v >= 1000 ? (+(v/1000).toFixed(1)) + 'M' : Math.round(v) + 'K'; }
+  function pct(p, d){ return (p>=0 ? '+' : '\u2212') + Math.abs(p).toFixed(d) + '%'; }
+  function trunc(s, n){ return s.length > n ? s.slice(0, Math.max(1,n-1)) + '\u2026' : s; }
+  function focusId(){ return state.hovered || state.pinned; }
+  function inSector(){ return D.industries.filter(function(d){ return state.sector==='all' || d.sector===state.sector; }); }
+  function visible(){
+    var l = inSector().sort(function(a,b){ return b.v[last]-a.v[last]; });
+    return state.count==='all' ? l : l.slice(0, state.count);
+  }
+  function totals(list){ return years.map(function(y,i){ return d3.sum(list, function(d){ return d.v[i]; }); }); }
+  function mk(dur){ return function(sel){ return dur ? sel.transition().duration(dur).ease(d3.easeCubicInOut) : sel; }; }
 
-  function compute(){
-    var list = D.industries.filter(function(d){ return state.sector==='all' || d.sector===state.sector; });
-    list.sort(function(a,b){ return b.v[last]-a.v[last]; });
-    if(state.count!=='all') list = list.slice(0, state.count);
+  function showTip(ev, html){
+    el.tip.innerHTML = html; el.tip.style.opacity = 1;
+    var w = el.tip.offsetWidth, x = ev.clientX + 14;
+    if(x + w > window.innerWidth - 8) x = ev.clientX - w - 14;
+    el.tip.style.left = x + 'px'; el.tip.style.top = (ev.clientY + 16) + 'px';
+  }
+  function hideTip(){ el.tip.style.opacity = 0; }
+
+  /* ---------- focus (hover / pin) shared across charts ---------- */
+  function paintFocus(){
+    var f = focusId();
+    d3.selectAll('.fx')
+      .classed('dim', function(d){ return !!f && d.id!==f; })
+      .classed('on',  function(d){ return !!f && d.id===f; })
+      .attr('aria-pressed', function(d){ return state.pinned===d.id ? 'true' : 'false'; });
+    d3.selectAll('.ind .pt circle').attr('r', function(){
+      var g = this.closest('.ind'); var d = g && d3.select(g).datum();
+      return (f && d && d.id===f) ? 10 : 8.5;
+    });
+  }
+  function onFocus(){ paintFocus(); renderTrend(true); }
+  function setHover(id){ if(state.hovered===id) return; state.hovered = id; onFocus(); }
+  function togglePin(id){ state.pinned = state.pinned===id ? null : id; onFocus(); }
+  function wireFx(sel){
+    sel.on('pointerenter', function(ev,d){ if(ev.pointerType==='touch') return; setHover(d.id); })
+       .on('pointerleave', function(){ setHover(null); hideTip(); })
+       .on('click', function(ev,d){ togglePin(d.id); })
+       .on('focus', function(ev,d){ setHover(d.id); })
+       .on('blur', function(){ setHover(null); })
+       .on('keydown', function(ev,d){ if(ev.key==='Enter' || ev.key===' '){ ev.preventDefault(); togglePin(d.id); } });
+  }
+
+  /* ---------- KPIs ---------- */
+  function renderKpis(){
+    var list = inSector(), tot = totals(list);
+    var t12 = tot[0], t25 = tot[last], gTot = (t25/t12-1)*100;
+    var largest = list.slice().sort(function(a,b){ return b.v[last]-a.v[last]; })[0];
+    var share = largest.v[last]/t25*100;
+    var cand = list.filter(function(d){ return d.v[0] >= 200; }); if(!cand.length) cand = list;
+    var fast = cand.slice().sort(function(a,b){ return b.v[last]/b.v[0] - a.v[last]/a.v[0]; })[0];
+    var g = (fast.v[last]/fast.v[0]-1)*100;
+    var i19 = years.indexOf(2019), i20 = years.indexOf(2020);
+    var ch = (tot[i20]/tot[i19]-1)*100, sub4 = 'vs 2019';
+    if(ch < 0){
+      for(var j=i20+1; j<=last; j++){ if(tot[j] >= tot[i19]){ sub4 = 'vs 2019, back above it in ' + years[j]; break; } }
+    }
+    var lab1 = state.sector==='all' ? 'Employed in 2025' : SECTOR[state.sector] + ' employed in 2025';
+    el.kpis.innerHTML =
+      '<div class="kpi"><div class="k">'+lab1+'</div><div class="v">'+fmtM(t25)+'</div><div class="s">'+pct(gTot,0)+' since '+years[0]+'</div></div>' +
+      '<div class="kpi" data-id="'+largest.id+'" tabindex="0"><div class="k">Largest industry</div><div class="v name">'+largest.short+'</div><div class="s">'+fmtM(largest.v[last])+' workers, '+share.toFixed(0)+'% of total</div></div>' +
+      '<div class="kpi" data-id="'+fast.id+'" tabindex="0"><div class="k">'+(g>=0?'Fastest growing':'Smallest decline')+'</div><div class="v name">'+fast.short+'</div><div class="s">'+pct(g,0)+' since '+years[0]+'</div></div>' +
+      '<div class="kpi"><div class="k">Change in 2020</div><div class="v">'+pct(ch,1)+'</div><div class="s">'+sub4+'</div></div>';
+    Array.prototype.forEach.call(el.kpis.querySelectorAll('.kpi[data-id]'), function(k){
+      var id = k.getAttribute('data-id');
+      k.addEventListener('pointerenter', function(ev){ if(ev.pointerType!=='touch') setHover(id); });
+      k.addEventListener('pointerleave', function(){ setHover(null); });
+      k.addEventListener('focus', function(){ setHover(id); });
+      k.addEventListener('blur', function(){ setHover(null); });
+    });
+  }
+
+  /* ---------- trend line ---------- */
+  var tsvg = d3.select(el.trend).append('svg').attr('role','img').attr('aria-label','Employed persons over time');
+  var tRoot = tsvg.append('g');
+  var tBand = tRoot.append('rect').attr('class','band');
+  var tGrid = tRoot.append('g').attr('class','grid');
+  var tAxis = tRoot.append('g').attr('class','axis');
+  var tArea = tRoot.append('path').attr('class','tarea');
+  var tLine = tRoot.append('path').attr('class','tline');
+  var tDot  = tRoot.append('circle').attr('class','tdot').attr('r',4);
+  var tHov  = tRoot.append('g').attr('class','hov').style('display','none');
+  tHov.append('line'); tHov.append('circle').attr('r',5);
+  var tOver = tRoot.append('rect').attr('fill','transparent').style('cursor','crosshair');
+  var TT = { x:null, y:null, s:null, m:null, H:0 };
+
+  function series(){
+    var f = focusId();
+    if(f && byId[f]) return { name: byId[f].short, sector: byId[f].sector, v: byId[f].v };
+    return { name: state.sector==='all' ? 'All industries' : SECTOR[state.sector], sector: state.sector, v: totals(inSector()) };
+  }
+  function renderTrend(animate){
+    var s = series(), dur = (animate && !reduce) ? 450 : 0, T = mk(dur);
+    var W = el.trend.clientWidth || 560, H = 250, m = {l:46, r:14, t:12, b:28};
+    var x = d3.scaleLinear().domain([years[0], years[last]]).range([m.l, W-m.r]);
+    var mn = d3.min(s.v), mx = d3.max(s.v), pad = (mx-mn)*0.25 || mx*0.05;
+    var y = d3.scaleLinear().domain([Math.max(0, mn-pad), mx+pad]).nice(4).range([H-m.b, m.t]);
+    TT.x = x; TT.y = y; TT.s = s; TT.m = m; TT.H = H; TT.W = W;
+
+    tsvg.attr('width', W).attr('height', H).attr('viewBox', '0 0 '+W+' '+H);
+    tRoot.attr('class', s.sector==='all' ? 'all' : cls(s.sector));
+    el.title.textContent = s.name;
+
+    tBand.attr('x', x(2019.5)).attr('width', x(2020.5)-x(2019.5)).attr('y', m.t).attr('height', H-m.t-m.b);
+
+    var ticks = y.ticks(4);
+    tGrid.selectAll('line').data(ticks, function(d){return d;}).join('line')
+      .attr('x1', m.l).attr('x2', W-m.r).attr('y1', y).attr('y2', y);
+    var yl = tAxis.selectAll('text.yl').data(ticks, function(d){return d;}).join('text').attr('class','yl')
+      .attr('x', m.l-8).attr('y', function(d){ return y(d)+4; }).text(fmtAxis);
+    var xt = [years[0], 2016, 2020, years[last]];
+    tAxis.selectAll('text.xl').data(xt, function(d){return d;}).join('text').attr('class','xl')
+      .attr('x', x).attr('y', H-8).text(function(d){return d;});
+
+    var data = years.map(function(yr,i){ return {yr:yr, v:s.v[i]}; });
+    var line = d3.line().x(function(d){return x(d.yr);}).y(function(d){return y(d.v);}).curve(d3.curveMonotoneX);
+    var area = d3.area().x(function(d){return x(d.yr);}).y0(H-m.b).y1(function(d){return y(d.v);}).curve(d3.curveMonotoneX);
+    T(tLine).attr('d', line(data));
+    T(tArea).attr('d', area(data));
+    T(tDot).attr('cx', x(years[last])).attr('cy', y(s.v[last]));
+
+    tOver.attr('x', m.l).attr('y', m.t).attr('width', W-m.l-m.r).attr('height', H-m.t-m.b);
+    setReadout(last, false);
+  }
+  function setReadout(i, hover){
+    var s = TT.s; if(!s) return;
+    el.read.textContent = years[i] + ': ' + fmtM(s.v[i]);
+    if(hover){
+      tHov.style('display', null);
+      tHov.select('line').attr('x1', TT.x(years[i])).attr('x2', TT.x(years[i])).attr('y1', TT.m.t).attr('y2', TT.H-TT.m.b);
+      tHov.select('circle').attr('cx', TT.x(years[i])).attr('cy', TT.y(s.v[i]));
+    } else tHov.style('display','none');
+  }
+  tOver.on('pointermove', function(ev){
+    var px = d3.pointer(ev, tsvg.node())[0];
+    var yr = Math.round(TT.x.invert(px)); yr = Math.max(years[0], Math.min(years[last], yr));
+    setReadout(years.indexOf(yr), true);
+  }).on('pointerleave', function(){ setReadout(last, false); });
+
+  /* ---------- bars ---------- */
+  var bsvg = d3.select(el.bars).append('svg').attr('role','group').attr('aria-label','Employed persons by industry, '+years[last]);
+  var bG = bsvg.append('g');
+  function renderBars(items, animate){
+    var n = items.length, dur = (animate && !reduce) ? 600 : 0, T = mk(dur);
+    var W = el.bars.clientWidth || 640, rowH = n<=10 ? 30 : 23, H = n*rowH + 4;
+    var labelW = Math.min(178, Math.round(W*0.42)), valueW = 52;
+    var chars = Math.floor((labelW-14)/6.7);
+    var x = d3.scaleLinear().domain([0, d3.max(items, function(d){return d.v[last];})]).range([0, Math.max(40, W-labelW-valueW-10)]);
+    var totalSector = d3.sum(inSector(), function(d){return d.v[last];});
+    bsvg.attr('width', W).attr('height', H).attr('viewBox','0 0 '+W+' '+H);
+
+    var g = bG.selectAll('g.bar').data(items, function(d){return d.id;});
+    g.interrupt().style('opacity', null);
+    g.exit().interrupt().transition().duration(dur).style('opacity',0).remove();
+    var ge = g.enter().append('g').attr('class', function(d){ return 'fx bar '+cls(d.sector); })
+      .attr('tabindex',0).attr('role','button');
+    ge.append('rect').attr('rx',2);
+    ge.append('text').attr('class','bl');
+    ge.append('text').attr('class','bv');
+    ge.style('opacity', dur ? 0 : null);
+    if(dur) ge.transition().delay(function(d,i){ return 120 + i*25; }).duration(700).style('opacity',1).on('end', function(){ this.style.opacity=''; });
+    wireFx(ge);
+    ge.on('pointermove', function(ev,d){
+        if(ev.pointerType==='touch') return;
+        showTip(ev, '<strong>'+d.short+'</strong><br>'+fmtM(d.v[last])+', '+(d.v[last]/totalSector*100).toFixed(1)+'% of total');
+      });
+    var all = ge.merge(g);
+    all.attr('aria-label', function(d){ return d.short+', '+fmtM(d.v[last])+' employed in '+years[last]; });
+    var ry = function(d,i){ return i*rowH + 2; };
+    ge.select('rect').attr('x', labelW).attr('y', function(d,i){ return ry(d,i)+4; }).attr('height', rowH-9).attr('width', function(d){ return x(d.v[last]); });
+    ge.select('.bl').attr('x', labelW-10).attr('y', function(d,i){ return ry(d,i)+rowH/2; });
+    ge.select('.bv').attr('x', function(d){ return labelW+x(d.v[last])+8; }).attr('y', function(d,i){ return ry(d,i)+rowH/2; });
+    all.select('.bl').text(function(d){ return trunc(d.short, chars); });
+    all.select('.bv').text(function(d){ return fmtM(d.v[last]); });
+    T(all.select('rect')).attr('x', labelW).attr('y', function(d,i){ return ry(d,i)+4; }).attr('height', rowH-9).attr('width', function(d){ return x(d.v[last]); });
+    T(all.select('.bl')).attr('x', labelW-10).attr('y', function(d,i){ return ry(d,i)+rowH/2; });
+    T(all.select('.bv')).attr('x', function(d){ return labelW+x(d.v[last])+8; }).attr('y', function(d,i){ return ry(d,i)+rowH/2; });
+  }
+
+  /* ---------- bump chart ---------- */
+  var csvg = d3.select(el.chart).append('svg').attr('role','group')
+    .attr('aria-label','Bump chart ranking industries by employed persons, '+years[0]+' to '+years[last]);
+  var cBand = csvg.append('g'), cGuide = csvg.append('g'), cYear = csvg.append('g'), cLines = csvg.append('g');
+  var cBandRect = cBand.append('rect').attr('class','band');
+
+  function computeRanks(list){
     var ranks = list.map(function(){ return new Array(years.length); });
     years.forEach(function(yr,i){
       list.map(function(d,j){ return {j:j, val:d.v[i]}; })
@@ -136,131 +368,77 @@ footer p{margin:0 0 6px}
     });
     return list.map(function(d,j){ return Object.assign({}, d, {ranks:ranks[j]}); });
   }
-
-  function summary(it, n){
-    var a=it.v[0], b=it.v[last], r0=it.ranks[0], r1=it.ranks[last], ch=(b-a)/a*100;
-    var rankTxt = r0===r1 ? 'held '+ord(r1)+' place' : (r1<r0 ? 'moved up from ' : 'moved down from ')+ord(r0)+' to '+ord(r1);
-    var sign = ch>=0 ? '+' : '';
-    return '<strong>'+it.short+'</strong> '+rankTxt+' among the '+n+' industries shown. Employment '+(ch>=0?'grew':'fell')+' from '+fmt(a)+' to '+fmt(b)+' ('+sign+ch.toFixed(0)+'%) between '+years[0]+' and '+years[last]+'.';
-  }
-  function yearText(it, i, n){
-    var t = '<strong>'+it.short+'</strong> in '+years[i]+': '+fmt(it.v[i])+' employed, ranked '+ord(it.ranks[i])+' of '+n+'.';
-    if(i>0){
-      var p=(it.v[i]-it.v[i-1])/it.v[i-1]*100;
-      t += ' '+(p>=0?'Up ':'Down ')+Math.abs(p).toFixed(1)+'% from '+years[i-1]+'.';
-    }
-    return t;
-  }
-
-  function focusId(){ return state.hovered || state.pinned; }
-  function paint(){
-    var f = focusId();
-    linesG.selectAll('g.ind')
-      .classed('dim', function(d){ return f && d.id!==f; })
-      .classed('on', function(d){ return f && d.id===f; })
-      .attr('aria-pressed', function(d){ return state.pinned===d.id ? 'true' : 'false'; });
-    linesG.selectAll('g.ind').each(function(d){
-      d3.select(this).selectAll('g.pt circle').attr('r', (f && d.id===f) ? 10 : 8.5);
-    });
-    if(!f){ detail.innerHTML = '<span class="hint">Hover an industry to see how its rank and employment changed.</span>'; return; }
-    var it = items.filter(function(d){ return d.id===f; })[0];
-    if(!it){ detail.innerHTML=''; return; }
-    detail.innerHTML = (state.hovered===f && state.hoverYear!==null)
-      ? yearText(it, years.indexOf(state.hoverYear), items.length)
-      : summary(it, items.length);
-  }
-
-  function togglePin(id){ state.pinned = state.pinned===id ? null : id; paint(); }
-
-  function render(animate){
-    items = compute();
-    var n = items.length;
-    var dur = (animate && !reduce) ? 700 : 0;
-    var T = function(sel){ return dur ? sel.transition().duration(dur).ease(d3.easeCubicInOut) : sel; };
-
-    var cw = wrap.clientWidth || 1000;
-    var W = Math.max(cw, 900);
-    var rowH = n<=6 ? 48 : (n<=12 ? 38 : 31);
-    var top = 66, bottom = 54, left = 214, right = 214;
-    var H = top + (n-1)*rowH + bottom;
-    var x = d3.scalePoint().domain(years).range([left, W-right]);
-    var step = x.step();
+  function renderBump(items, animate){
+    var n = items.length, dur = (animate && !reduce) ? 700 : 0, T = mk(dur);
+    var cw = el.chart.clientWidth || 1000, W = Math.max(cw, 900);
+    var rowH = n<=6 ? 46 : (n<=12 ? 36 : 29);
+    var top = 46, bottom = 30, left = 214, right = 214;
+    var bottomY = top + (n-1)*rowH, H = bottomY + bottom;
+    var x = d3.scalePoint().domain(years).range([left, W-right]), step = x.step();
     var y = function(r){ return top + (r-1)*rowH; };
-    var bottomY = top + (n-1)*rowH;
+    csvg.attr('width', W).attr('height', H).attr('viewBox','0 0 '+W+' '+H);
 
-    svg.attr('width', W).attr('height', H).attr('viewBox', '0 0 '+W+' '+H);
+    T(cBandRect).attr('x', x(2020)-step/2).attr('width', step).attr('y', top-22).attr('height', (n-1)*rowH+44);
+    cGuide.selectAll('line').data(years, function(d){return d;}).join('line').attr('class','guide')
+      .attr('x1', x).attr('x2', x).attr('y1', top-20).attr('y2', bottomY+20);
+    cYear.selectAll('text').data(years, function(d){return d;}).join('text').attr('class','yr')
+      .attr('x', x).attr('y', top-30).text(function(d){return d;});
 
-    // pandemic band
-    var bx = x(2020) - step/2;
-    T(bandRect).attr('x', bx).attr('width', step).attr('y', top-24).attr('height', (n-1)*rowH+48);
-    T(bandText).attr('x', x(2020)).attr('y', bottomY+44);
-
-    // year guides and labels
-    guideG.selectAll('line').data(years, function(d){return d;}).join('line')
-      .attr('class','guide').attr('x1', x).attr('x2', x).attr('y1', top-20).attr('y2', bottomY+20);
-    yearG.selectAll('text').data(years, function(d){return d;}).join('text')
-      .attr('class','yr').attr('x', x).attr('y', top-36).text(function(d){return d;});
-
-    // industries
-    var g = linesG.selectAll('g.ind').data(items, function(d){ return d.id; });
+    var g = cLines.selectAll('g.ind').data(items, function(d){return d.id;});
+    g.interrupt().style('opacity', null);
     g.exit().interrupt().transition().duration(dur).style('opacity',0).remove();
-
-    var ge = g.enter().append('g')
-      .attr('class', function(d){ return 'ind '+(d.sector==='ind' ? 'ind-s' : d.sector); })
-      .attr('tabindex', 0).attr('role','button');
+    var ge = g.enter().append('g').attr('class', function(d){ return 'fx ind '+cls(d.sector); })
+      .attr('tabindex',0).attr('role','button');
     ge.append('path').attr('class','hit');
     ge.append('path').attr('class','line');
     ge.append('g').attr('class','dots');
     ge.append('text').attr('class','lab l');
     ge.append('text').attr('class','lab r');
     ge.style('opacity', dur ? 0 : null);
-    if(dur){
-      ge.transition().delay(function(d,i){ return 250 + i*28; }).duration(900).style('opacity',1)
-        .on('end', function(){ this.style.opacity=''; });
-    }
-
-    ge.on('pointerenter', function(ev,d){ if(ev.pointerType==='touch') return; state.hovered = d.id; paint(); })
-      .on('pointerleave', function(ev,d){ state.hovered = null; state.hoverYear = null; paint(); })
-      .on('click', function(ev,d){ togglePin(d.id); })
-      .on('focus', function(ev,d){ state.hovered = d.id; paint(); })
-      .on('blur', function(ev,d){ state.hovered = null; state.hoverYear = null; paint(); })
-      .on('keydown', function(ev,d){ if(ev.key==='Enter' || ev.key===' '){ ev.preventDefault(); togglePin(d.id); } });
+    if(dur) ge.transition().delay(function(d,i){ return 250 + i*28; }).duration(900).style('opacity',1).on('end', function(){ this.style.opacity=''; });
+    wireFx(ge);
 
     var all = ge.merge(g);
-    all.attr('aria-label', function(d){ return d.short+', ranked '+ord(d.ranks[0])+' in '+years[0]+' and '+ord(d.ranks[last])+' in '+years[last]+'. Press Enter to keep highlighted.'; });
-    // keep DOM order = rank order in last year (right-hand labels read top to bottom)
+    all.attr('aria-label', function(d){ return d.short+', ranked '+d.ranks[0]+' in '+years[0]+' and '+d.ranks[last]+' in '+years[last]+'. Press Enter to keep highlighted.'; });
     var line = d3.line().x(function(p){return x(p.yr);}).y(function(p){return y(p.rank);}).curve(d3.curveBumpX);
-    function pts(d){ return years.map(function(yr,i){ return {yr:yr, rank:d.ranks[i], id:d.id}; }); }
+    function pts(d){ return years.map(function(yr,i){ return {yr:yr, rank:d.ranks[i], val:d.v[i], id:d.id, name:d.short}; }); }
 
-    // set initial geometry for entering nodes (no animation from nothing)
     ge.select('.hit').attr('d', function(d){ return line(pts(d)); });
     ge.select('.line').attr('d', function(d){ return line(pts(d)); });
     ge.select('.lab.l').attr('x', left-20).attr('y', function(d){ return y(d.ranks[0])+4.5; });
     ge.select('.lab.r').attr('x', W-right+20).attr('y', function(d){ return y(d.ranks[last])+4.5; });
-
     T(all.select('.hit')).attr('d', function(d){ return line(pts(d)); });
     T(all.select('.line')).attr('d', function(d){ return line(pts(d)); });
     all.select('.lab.l').text(function(d){ return d.short; });
     all.select('.lab.r').text(function(d){ return d.short; });
-    T(all.select('.lab.l')).attr('x', left-20).attr('y', function(d){ return y(d.ranks[0])+4.5; });
-    T(all.select('.lab.r')).attr('x', W-right+20).attr('y', function(d){ return y(d.ranks[last])+4.5; });
+    T(all.select('.lab.l')).attr('y', function(d){ return y(d.ranks[0])+4.5; });
+    T(all.select('.lab.r')).attr('y', function(d){ return y(d.ranks[last])+4.5; });
+    all.select('.lab.l').attr('x', left-20); all.select('.lab.r').attr('x', W-right+20);
 
-    var pt = all.select('.dots').selectAll('g.pt').data(pts, function(p){ return p.yr; });
-    var pe = pt.enter().append('g').attr('class','pt')
-      .attr('transform', function(p){ return 'translate('+x(p.yr)+','+y(p.rank)+')'; });
-    pe.append('circle').attr('r', 8.5);
-    pe.append('text');
-    pe.on('pointerenter', function(ev,p){ if(ev.pointerType==='touch') return; state.hoverYear = p.yr; paint(); })
-      .on('pointerleave', function(){ state.hoverYear = null; paint(); });
+    var pt = all.select('.dots').selectAll('g.pt').data(pts, function(p){return p.yr;});
+    var pe = pt.enter().append('g').attr('class','pt');
+    pe.append('circle').attr('r',8.5).attr('cx', function(p){return x(p.yr);}).attr('cy', function(p){return y(p.rank);});
+    pe.append('text').attr('x', function(p){return x(p.yr);}).attr('y', function(p){return y(p.rank);});
+    pe.on('pointerenter pointermove', function(ev,p){
+        if(ev.pointerType==='touch') return;
+        showTip(ev, '<strong>'+p.name+'</strong><br>'+p.yr+': #'+p.rank+', '+fmtM(p.val));
+      }).on('pointerleave', hideTip);
     var pm = pe.merge(pt);
-    pm.select('text').text(function(p){ return p.rank; });
-    T(pm).attr('transform', function(p){ return 'translate('+x(p.yr)+','+y(p.rank)+')'; });
-
-    // stack order: highlighted line on top isn't needed (dimming handles it); keep stable
-    if(state.pinned && !items.some(function(d){ return d.id===state.pinned; })) state.pinned = null;
-    paint();
+    pm.select('text').text(function(p){return p.rank;});
+    T(pm.select('circle')).attr('cx', function(p){return x(p.yr);}).attr('cy', function(p){return y(p.rank);});
+    T(pm.select('text')).attr('x', function(p){return x(p.yr);}).attr('y', function(p){return y(p.rank);});
   }
 
+  /* ---------- orchestration ---------- */
+  function renderAll(animate){
+    var items = computeRanks(visible());
+    if(state.pinned && !items.some(function(d){ return d.id===state.pinned; })) state.pinned = null;
+    renderKpis();
+    renderBars(items, animate);
+    renderBump(items, animate);
+    renderTrend(animate);
+    paintFocus();
+  }
   function setPressed(container, v){
     Array.prototype.forEach.call(container.querySelectorAll('button'), function(b){
       b.setAttribute('aria-pressed', b.getAttribute('data-v')===String(v) ? 'true' : 'false');
@@ -268,21 +446,22 @@ footer p{margin:0 0 6px}
   }
   document.getElementById('seg-sector').addEventListener('click', function(e){
     var b = e.target.closest('button'); if(!b) return;
-    state.sector = b.getAttribute('data-v'); setPressed(this, state.sector); render(true);
+    state.sector = b.getAttribute('data-v'); state.hovered = null; setPressed(this, state.sector); renderAll(true);
   });
   document.getElementById('seg-count').addEventListener('click', function(e){
     var b = e.target.closest('button'); if(!b) return;
-    var v = b.getAttribute('data-v'); state.count = v==='all' ? 'all' : +v; setPressed(this, v); render(true);
+    var v = b.getAttribute('data-v'); state.count = v==='all' ? 'all' : +v; state.hovered = null; setPressed(this, v); renderAll(true);
   });
 
-  render(true);
+  renderAll(true);
 
   if(typeof ResizeObserver !== 'undefined'){
-    var t, lastW = wrap.clientWidth;
+    var t, lastW = document.querySelector('main').clientWidth;
     new ResizeObserver(function(){
-      if(wrap.clientWidth === lastW) return;
-      lastW = wrap.clientWidth; clearTimeout(t); t = setTimeout(function(){ render(false); }, 150);
-    }).observe(wrap);
+      var w = document.querySelector('main').clientWidth;
+      if(w === lastW) return;
+      lastW = w; clearTimeout(t); t = setTimeout(function(){ renderAll(false); }, 150);
+    }).observe(document.querySelector('main'));
   }
 })();
 </script>
