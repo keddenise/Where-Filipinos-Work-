@@ -9,3 +9,5 @@ A prototype interactive visualization showing how Philippine industries rank by 
 Data: Philippine Statistics Authority (PSA) Labor Force Survey, annual figures by major industry group (2009 PSIC), downloaded from PSA OpenSTAT. Extraterritorial organizations and the partial 2026 year are excluded.
 
 This is an independent project and is not an official PSA product.
+
+[Number of Employed Persons by Major Industry Group (2009 PSIC Code)- January 2012 to July 2026.csv](https://github.com/user-attachments/files/32411035/Number.of.Employed.Persons.by.Major.Industry.Group.2009.PSIC.Code.-.January.2012.to.July.2026.csv)
